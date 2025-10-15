@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy HTML i CSS - zadanie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#rejestracja">Rejestracja</a></li>
+                <li><a href="#tabela">Tabela</a></li>
+                <li><a href="#obraz">Obraz</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Rejestracja -->
+    <div class="container page-section" id="rejestracja"> 
+        <h1 class="register-title">Rejestracja</h1>
+        <form class="register-form">
+            <div class="form-group">
+                <label>Login</label>
+                <input type="text">
+            </div>
+            
+            <div class="form-group">
+                <label>Hasło</label>
+                <input type="password">
+            </div>
+            
+            <div class="form-group">
+                <label>Płeć</label>
+                <div class="radio-group">
+                    <label>M <input type="radio" name="plec" value="M"></label>
+                    <label>K <input type="radio" name="plec" value="K"></label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Stopień</label>
+                <select>
+                    <option>1</option>
+                    <option selected>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Wiadomość</label>
+                <textarea placeholder="Wpisz tekst."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Prześlij</button>
+        </form>
+
+        <div class="advertisement">
+            <img src="reklama.png" alt="Reklama">
+        </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="container page-section" id="tabela"> 
+        <h1 class="register-title">Tabela</h1>
+        <div class="content-wrapper">
+            <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Grupa</th>
+                            <th colspan="7">Data</th>
+                        </tr>
+                        <tr>
+                            <td>1, 3</td>
+                            <td class="date-header">25.11</td>
+                            <td class="date-header">2.12</td>
+                            <td class="date-header">9.12</td>
+                            <td class="date-header">16.12</td>
+                            <td class="date-header">13.01</td>
+                            <td class="date-header">20.01</td>
+                            <td class="date-header">27.01</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SEKCJA</td>
+                            <td colspan="7"></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td rowspan="4">Obrony</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td rowspan="4">Obrony</td>
+                            <td rowspan="4">Zal</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
+
+        <div class="advertisement">
+            <img src="reklama.png" alt="Reklama">
+        </div>
+    </div>
+
+    <!-- Obraz -->
+    <div class="container page-section" id="obraz"> 
+        <h1 class="register-title">Obraz</h1>
+        <div class="content-wrapper">
+            <img src="logo.png" alt="Logo HTML i CSS" class="main-image">
+            <figcaption>Logo HTML i CSS</figcaption>
+        </div>
+
+        <div class="advertisement">
+            <img src="reklama.png" alt="Reklama">
+        </div>
+    </div>
+
+    <footer>
+        <p>© Footer</p>
+    </footer>
+</body>
+</html>
