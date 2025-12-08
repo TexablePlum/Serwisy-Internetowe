@@ -1,143 +1,63 @@
 <?php
-// Funkcje pomocnicze
+// Włączenie ścisłego trybu typowania
+declare(strict_types=1);
+// Rozpoczęcie lub wznowienie sesji
+session_start();
+// Ustawienie wyświetlania błędów
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+// Zdefiniowanie ścieżki katalogu głównego aplikacji
+define('_ROOT_PATH', dirname(__FILE__));
+// Stała do sprawdzania poprawności uruchomienia aplikacji
+define('APP_START', true);
 
-/**
- * Sprawdza czy rok jest przestępny
- */
-function czyPrzestepny($rok) {
-    if ($rok % 400 == 0) return true;
-    if ($rok % 100 == 0) return false;
-    if ($rok % 4 == 0) return true;
-    return false;
+// Dane logowania (na sztywno)
+define('VALID_LOGIN', 'admin');
+define('VALID_PASSWORD', 'admin123');
+
+// Lista dozwolonych akcji dla niezalogowanych
+$actionsGuest = ['login', 'table'];
+// Lista dozwolonych akcji dla zalogowanych
+$actionsUser = ['home', 'table', 'date', 'logout'];
+
+// Sprawdzenie czy użytkownik jest zalogowany
+$isLoggedIn = isset($_SESSION['user_logged']) && $_SESSION['user_logged'] === true;
+
+// Ustalenie domyślnej akcji
+if ($isLoggedIn) {
+    $action = 'home';
+    $allowedActions = $actionsUser;
+} else {
+    $action = 'login';
+    $allowedActions = $actionsGuest;
 }
 
-/**
- * Zwraca liczbę dni w danym miesiącu
- */
-function dniWMiesiacu($miesiac, $rok) {
-    $dni = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    
-    if ($miesiac == 2 && czyPrzestepny($rok)) {
-        return 29;
-    }
-    
-    return $dni[$miesiac];
-}
-
-/**
- * Oblicza liczbę dni od początku kalendarza do podanej daty
- */
-function obliczDniOdPoczatku($dzien, $miesiac, $rok) {
-    $suma_dni = 0;
-    
-    // Zlicza dni we wszystkich pełnych latach
-    for ($r = 1; $r < $rok; $r++) {
-        $suma_dni += czyPrzestepny($r) ? 366 : 365;
-    }
-    
-    // Zlicza dni we wszystkich pełnych miesiącach
-    for ($m = 1; $m < $miesiac; $m++) {
-        $suma_dni += dniWMiesiacu($m, $rok);
-    }
-    
-    // Dodaje pozostałe dni
-    $suma_dni += $dzien;
-    
-    return $suma_dni;
-}
-
-/**
- * Oblicza różnicę dni między dwiema datami
- */
-function obliczRoznice($data_string) {
-    // Parsuje datę z formatu YYYY-MM-DD
-    $rok = (int)substr($data_string, 0, 4);
-    $miesiac = (int)substr($data_string, 5, 2);
-    $dzien = (int)substr($data_string, 8, 2);
-    
-    // Aktualna data
-    $dzis = date("Y-m-d");
-    $rok_dzis = (int)substr($dzis, 0, 4);
-    $miesiac_dzis = (int)substr($dzis, 5, 2);
-    $dzien_dzis = (int)substr($dzis, 8, 2);
-    
-    // Oblicza różnicę
-    $dni_data = obliczDniOdPoczatku($dzien, $miesiac, $rok);
-    $dni_dzisiaj = obliczDniOdPoczatku($dzien_dzis, $miesiac_dzis, $rok_dzis);
-    
-    return $dni_data - $dni_dzisiaj;
-}
-
-/**
- * Formatuje datę z YYYY-MM-DD do DD.MM.RRRR
- */
-function formatujDate($data) {
-    $dzien = substr($data, 8, 2);
-    $miesiac = substr($data, 5, 2);
-    $rok = substr($data, 0, 4);
-    return "$dzien.$miesiac.$rok";
-}
-
-// Obługa formularza
-$wynik = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['data']) && $_POST['data'] !== '') {
-    $data = $_POST['data'];
-    $roznica = obliczRoznice($data);
-    $data_wyswietl = formatujDate($data);
-    
-    if ($roznica > 0) {
-        $wynik = "<div class='result-message'>Do daty <strong>$data_wyswietl</strong> pozostało <strong>$roznica dni</strong>.</div>";
-    } elseif ($roznica < 0) {
-        $roznica_abs = abs($roznica);
-        $wynik = "<div class='result-message'>Od daty <strong>$data_wyswietl</strong> minęło <strong>$roznica_abs dni</strong>.</div>";
+// Pobranie parametru 'action' z adresu URL
+if (isset($_GET['action']) && in_array($_GET['action'], $allowedActions, true)) {
+    $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
+} elseif (isset($_GET['action'])) {
+    // Jeśli akcja nie jest dozwolona, przekieruj
+    if ($isLoggedIn) {
+        header('Location: index.php?action=home');
     } else {
-        $wynik = "<div class='result-message'>Podana data to <strong>dzisiaj</strong>!</div>";
+        header('Location: index.php?action=login');
     }
+    exit();
 }
+
+// Przekierowanie zalogowanego użytkownika z login do home
+if ($isLoggedIn && $action === 'login') {
+    header('Location: index.php?action=home');
+    exit();
+}
+
+// Przekierowanie niezalogowanego użytkownika z chronionych stron
+if (!$isLoggedIn && in_array($action, ['home', 'date', 'logout'])) {
+    header('Location: index.php?action=login');
+    exit();
+}
+
+// Dołączenie pliku z logiką i odpowiadającego mu widoku
+include _ROOT_PATH . '/actions/' . $action . '.php';
+include _ROOT_PATH . '/views/' . $action . '.php';
 ?>
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Dat</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.php">Data</a></li>
-                <li><a href="palindrom.php">Palindrom</a></li>
-                <li><a href="kalkulator.php">Kalkulator</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main class="container">
-        <h1 class="page-title">Kalkulator Dat</h1>
-        
-        <div class="form-wrapper">
-            <form method="POST">
-                <div class="form-group">
-                    <label for="data">Wybierz datę:</label>
-                    <input type="date" id="data" name="data" required>
-                </div>
-                
-                <button type="submit" class="submit-btn">Oblicz różnicę</button>
-            </form>
-            
-            <?php echo $wynik; ?>
-        </div>
-
-        <aside class="advertisement">
-            <img src="reklama.png" alt="Reklama">
-        </aside>
-    </main>
-
-    <footer>
-        <p>&copy; Footer</p>
-    </footer>
-</body>
-</html>
