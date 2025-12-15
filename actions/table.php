@@ -5,7 +5,6 @@ if (!defined('APP_START')) {
     exit();
 }
 
-// Sprawdzenie czy użytkownik jest zalogowany
-$isLoggedIn = isset($_SESSION['user_logged']) && $_SESSION['user_logged'] === true;
-$userName = isset($_SESSION['user_fullName']) ? $_SESSION['user_fullName'] : '';
+// Pobranie nazwy użytkownika z sesji
+$userName = isset($_SESSION['user_fullname']) ? $_SESSION['user_fullname'] : '';
 ?>

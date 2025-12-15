@@ -6,22 +6,24 @@ session_start();
 // Ustawienie wyświetlania błędów
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
+
 // Zdefiniowanie ścieżki katalogu głównego aplikacji
 define('_ROOT_PATH', dirname(__FILE__));
 // Stała do sprawdzania poprawności uruchomienia aplikacji
 define('APP_START', true);
 
-// Dane logowania (na sztywno)
-define('VALID_LOGIN', 'admin');
-define('VALID_PASSWORD', 'admin123');
+// Ładowanie klas (modelu)
+require_once _ROOT_PATH . '/src/User.php';
+require_once _ROOT_PATH . '/src/Note.php';
+require_once _ROOT_PATH . '/src/NoteRepository.php';
 
 // Lista dozwolonych akcji dla niezalogowanych
 $actionsGuest = ['login', 'table'];
 // Lista dozwolonych akcji dla zalogowanych
 $actionsUser = ['home', 'table', 'date', 'logout'];
 
-// Sprawdzenie czy użytkownik jest zalogowany
-$isLoggedIn = isset($_SESSION['user_logged']) && $_SESSION['user_logged'] === true;
+// Sprawdzenie czy użytkownik jest zalogowany (wg wymagań sprawdzamy user_login)
+$isLoggedIn = isset($_SESSION['user_login']);
 
 // Ustalenie domyślnej akcji
 if ($isLoggedIn) {
@@ -58,6 +60,10 @@ if (!$isLoggedIn && in_array($action, ['home', 'date', 'logout'])) {
 }
 
 // Dołączenie pliku z logiką i odpowiadającego mu widoku
-include _ROOT_PATH . '/actions/' . $action . '.php';
-include _ROOT_PATH . '/views/' . $action . '.php';
+if (file_exists(_ROOT_PATH . '/actions/' . $action . '.php')) {
+    include _ROOT_PATH . '/actions/' . $action . '.php';
+}
+if (file_exists(_ROOT_PATH . '/views/' . $action . '.php')) {
+    include _ROOT_PATH . '/views/' . $action . '.php';
+}
 ?>

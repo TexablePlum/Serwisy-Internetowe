@@ -5,22 +5,15 @@ if (!defined('APP_START')) {
     exit();
 }
 
-// Usunięcie danych sesji
-$_SESSION = array();
+// Wyczyszczenie wszystkich zmiennych w tablicy $_SESSION
+session_unset();
 
-// Zniszczenie ciasteczka sesji
-if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-    );
-}
-
-// Zniszczenie sesji
+// Zniszczenie sesji na serwerze
 session_destroy();
 
-// Przekierowanie do strony logowania
+// Przekierowanie użytkownika z powrotem do formularza logowania
 header('Location: index.php?action=login');
+
+// Natychmiastowe zatrzymanie wykonywania skryptu po wysłaniu nagłówka przekierowania
 exit();
 ?>

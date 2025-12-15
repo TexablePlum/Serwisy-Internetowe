@@ -5,8 +5,8 @@ if (!defined('APP_START')) {
     exit();
 }
 
-// Pobranie nazwy użytkownika z sesji
-$userName = isset($_SESSION['user_fullName']) ? $_SESSION['user_fullName'] : 'Użytkownik';
+// Pobranie nazwy użytkownika z sesji (poprawiony klucz 'user_fullname')
+$userName = isset($_SESSION['user_fullname']) ? $_SESSION['user_fullname'] : 'Użytkownik';
 
 // Funkcje pomocnicze
 

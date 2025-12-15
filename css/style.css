@@ -1,8 +1,11 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: silver;
     margin: 0;
-    padding: 20px;
-    font-family: Arial, sans-serif;
+    padding: 15px;
 }
 
 header {
@@ -64,7 +67,7 @@ header nav ul li a:hover {
     flex-direction: column;
     position: relative; 
     background-color: white;
-    min-height: 550px;
+    height: 525px; 
     padding-right: 270px;
     padding-bottom: 20px;
 }
@@ -72,6 +75,7 @@ header nav ul li a:hover {
 .register-title {
     color: black;
     margin-left: 20px;
+    margin-bottom: 15px;
 }
 
 .register-form {
@@ -101,7 +105,6 @@ header nav ul li a:hover {
     height: 30px;
     border: 2px solid #000;
     padding: 0 5px;
-    box-sizing: border-box;
 }
 
 .radio-group {
@@ -147,6 +150,7 @@ header nav ul li a:hover {
     right: 20px;
     bottom: 20px;
     width: 250px;
+    overflow: hidden; 
 }
 
 .advertisement img {
@@ -158,6 +162,12 @@ header nav ul li a:hover {
 .content-wrapper {
     margin-left: 100px;
     margin-top: 20px;
+    padding-right: 20px;
+    /* UKŁAD DWUKOLUMNOWY */
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start; /* Wyrównanie do góry */
 }
 
 .welcome-message {
@@ -214,6 +224,75 @@ footer {
     border-bottom-right-radius: 10px;
 }
 
+.form-section {
+    width: 40%;
+    flex-shrink: 0;
+}
+
+.form-section h3,
+.notes-section h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    line-height: 1.2; 
+}
+
+.note-form {
+    border: 2px dashed #858585;
+    padding: 15px;
+    background: #f9f9f9;
+    width: 100%;
+}
+
+.note-form input[type="text"] {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 2px solid #000;
+}
+
+.note-form textarea {
+    width: 100%;
+    height: 80px; 
+    margin-bottom: 10px;
+    resize: none; 
+    border: 2px solid #000;
+    font-family: Arial, sans-serif;
+}
+
+.notes-section {
+    width: 58%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll-wrapper {
+    max-height: 340px; 
+    overflow-y: auto;
+    border: 2px solid #000;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.notes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.notes-table th, .notes-table td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+}
+
+.notes-table th {
+    background-color: #3E70AD;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
 /* Responsywność */
 @media (max-width: 768px) {
     header {
@@ -221,46 +300,34 @@ footer {
         gap: 10px;
     }
     
-    header nav {
-        width: 100%;
-    }
-    
-    header nav ul {
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-    }
-    
-    header nav ul li {
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    header nav ul li a {
+    header nav, header nav ul, header nav ul li, header nav ul li a {
         width: 100%;
     }
     
     .container {
         padding-right: 0;
-        align-items: center;
-    }
-    
-    .register-title {
-        text-align: center;
-        margin-left: 0;
+        height: auto; 
     }
     
     .register-form {
         margin-left: 0;
-        margin-right: 0;
     }
     
     .content-wrapper {
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: 0;
+        padding: 10px;
+        flex-direction: column; 
     }
     
     .advertisement {
         display: none;
+    }
+    
+    .form-section, .notes-section {
+        width: 100%;
+    }
+    
+    .scroll-wrapper {
+        max-height: 200px;
     }
 }

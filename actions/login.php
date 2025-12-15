@@ -5,25 +5,29 @@ if (!defined('APP_START')) {
     exit();
 }
 
-$loginError = ''; // Komunikat o błędzie
+$loginError = '';
 
-// Obsługa formularza logowania
+// Definicja użytkowników i ich haseł
+$users = [
+    'admin' => ['password' => 'admin123', 'fullName' => 'Administrator Systemu'],
+    'anna' => ['password' => 'test123', 'fullName' => 'Anna Kowalska'],
+    'jan' => ['password' => 'janek', 'fullName' => 'Jan Nowak'],
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Pobranie i oczyszczenie danych z formularza
     $login = isset($_POST['login']) ? trim($_POST['login']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
     
-    // Walidacja - sprawdzenie czy pola nie są puste
     if (empty($login) || empty($password)) {
         $loginError = 'Proszę wypełnić wszystkie pola.';
     }
-    // Sprawdzenie poprawności danych logowania
-    elseif ($login === VALID_LOGIN && $password === VALID_PASSWORD) {
-        // Zalogowanie użytkownika
-        $_SESSION['user_logged'] = true;
-        $_SESSION['user_fullName'] = $login;
+    // Sprawdzenie czy użytkownik istnieje w tablicy i hasło się zgadza
+    elseif (array_key_exists($login, $users) && $users[$login]['password'] === $password) {
         
-        // Przekierowanie do strony głównej
+        // Zapisanie danych do sesji (wymagane nazwy kluczy)
+        $_SESSION['user_login'] = $login;
+        $_SESSION['user_fullname'] = $users[$login]['fullName'];
+        
         header('Location: index.php?action=home');
         exit();
     } else {

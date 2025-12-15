@@ -19,7 +19,7 @@
     <main class="container">
         <h1 class="register-title">Logowanie</h1>
         <form method="POST" action="index.php?action=login" class="register-form">
-            <?php if (!empty($loginError)): ?>
+            <?php if (!empty($loginError)): ?>  
                 <div class="error-message"><?= htmlspecialchars($loginError) ?></div>
             <?php endif; ?>
             <div class="form-group">
