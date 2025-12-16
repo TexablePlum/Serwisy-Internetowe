@@ -55,6 +55,10 @@ header nav ul li a:hover {
     background-color: #4982cb;
 }
 
+header nav ul li a.wider-nav-btn {
+    width: 160px;
+}
+
 .user-info {
     color: white;
     padding: 10px 20px;
@@ -65,11 +69,12 @@ header nav ul li a:hover {
 .container {
     display: flex;
     flex-direction: column;
-    position: relative; 
+    position: relative;
     background-color: white;
-    height: 525px; 
-    padding-right: 270px;
+    min-height: 525px;
+    padding-right: 290px;
     padding-bottom: 20px;
+    padding-top: 10px;
 }
 
 .register-title {
@@ -108,7 +113,7 @@ header nav ul li a:hover {
 }
 
 .radio-group {
-   gap: 10px;
+    gap: 10px;
 }
 
 .form-group select {
@@ -148,15 +153,16 @@ header nav ul li a:hover {
     position: absolute;
     top: 20px;
     right: 20px;
-    bottom: 20px;
     width: 250px;
-    overflow: hidden; 
+    height: 485px;
+    overflow: hidden;
+    border: 2px solid #ccc;
 }
 
 .advertisement img {
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
 }
 
 .content-wrapper {
@@ -167,7 +173,8 @@ header nav ul li a:hover {
     display: flex;
     flex-direction: row;
     gap: 20px;
-    align-items: flex-start; /* Wyrównanie do góry */
+    align-items: flex-start;
+    /* Wyrównanie do góry */
 }
 
 .welcome-message {
@@ -197,6 +204,11 @@ header nav ul li a:hover {
     color: white;
 }
 
+.data-table tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: background-color 0.15s ease;
+}
+
 .error-message {
     background-color: #ffcccc;
     color: #cc0000;
@@ -215,7 +227,24 @@ header nav ul li a:hover {
     border-radius: 5px;
 }
 
+.action-link {
+    color: #3E6FAD;
+    text-decoration: none;
+    padding: 0 5px;
+    border-right: 1px solid #ccc;
+}
+
+.action-link:last-child {
+    border-right: none;
+}
+
+.action-link:hover {
+    color: #4982cb;
+    text-decoration: underline;
+}
+
 footer {
+
     background-color: #0D3F82;
     color: white;
     padding: 15px;
@@ -233,7 +262,7 @@ footer {
 .notes-section h3 {
     margin-top: 0;
     margin-bottom: 10px;
-    line-height: 1.2; 
+    line-height: 1.2;
 }
 
 .note-form {
@@ -253,9 +282,9 @@ footer {
 
 .note-form textarea {
     width: 100%;
-    height: 80px; 
+    height: 80px;
     margin-bottom: 10px;
-    resize: none; 
+    resize: none;
     border: 2px solid #000;
     font-family: Arial, sans-serif;
 }
@@ -267,7 +296,7 @@ footer {
 }
 
 .scroll-wrapper {
-    max-height: 340px; 
+    max-height: 340px;
     overflow-y: auto;
     border: 2px solid #000;
     margin-bottom: 10px;
@@ -279,7 +308,8 @@ footer {
     border-collapse: collapse;
 }
 
-.notes-table th, .notes-table td {
+.notes-table th,
+.notes-table td {
     border: 1px solid #000;
     padding: 8px;
     text-align: left;
@@ -299,34 +329,38 @@ footer {
         flex-direction: column;
         gap: 10px;
     }
-    
-    header nav, header nav ul, header nav ul li, header nav ul li a {
+
+    header nav,
+    header nav ul,
+    header nav ul li,
+    header nav ul li a {
         width: 100%;
     }
-    
+
     .container {
         padding-right: 0;
-        height: auto; 
+        height: auto;
     }
-    
+
     .register-form {
         margin-left: 0;
     }
-    
+
     .content-wrapper {
         margin-left: 0;
         padding: 10px;
-        flex-direction: column; 
+        flex-direction: column;
     }
-    
+
     .advertisement {
         display: none;
     }
-    
-    .form-section, .notes-section {
+
+    .form-section,
+    .notes-section {
         width: 100%;
     }
-    
+
     .scroll-wrapper {
         max-height: 200px;
     }

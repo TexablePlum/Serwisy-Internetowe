@@ -13,22 +13,30 @@ define('_ROOT_PATH', dirname(__FILE__));
 define('APP_START', true);
 
 // Ładowanie klas (modelu)
+require_once _ROOT_PATH . '/src/Database.php';
 require_once _ROOT_PATH . '/src/User.php';
-require_once _ROOT_PATH . '/src/Note.php';
-require_once _ROOT_PATH . '/src/NoteRepository.php';
+require_once _ROOT_PATH . '/src/Book.php';
+require_once _ROOT_PATH . '/src/UserRepository.php';
+require_once _ROOT_PATH . '/src/BookRepository.php';
+require_once _ROOT_PATH . '/src/BorrowRepository.php';
 
-// Lista dozwolonych akcji dla niezalogowanych
-$actionsGuest = ['login', 'table'];
-// Lista dozwolonych akcji dla zalogowanych
-$actionsUser = ['home', 'table', 'date', 'logout'];
+// Sprawdzenie czy użytkownik jest zalogowany
+$isLoggedIn = isset($_SESSION['user_id']);
 
-// Sprawdzenie czy użytkownik jest zalogowany (wg wymagań sprawdzamy user_login)
-$isLoggedIn = isset($_SESSION['user_login']);
+// Lista akcji dla niezalogowanych użytkowników
+$actionsGuest = ['login'];
 
-// Ustalenie domyślnej akcji
+// Lista akcji dla administratorów
+$actionsAdmin = ['users', 'add_user', 'edit_user', 'delete_user', 'user_books', 'add_book', 'edit_book', 'delete_book', 'book_borrowers', 'books', 'borrow_book', 'borrowed_books', 'return_book', 'logout'];
+
+// Lista akcji dla czytelników
+$actionsReader = ['books', 'borrow_book', 'borrowed_books', 'return_book', 'logout'];
+
+// Ustalenie domyślnej akcji i dozwolonych akcji
 if ($isLoggedIn) {
-    $action = 'home';
-    $allowedActions = $actionsUser;
+    $isAdmin = isset($_SESSION['user_permission']) && $_SESSION['user_permission'] === 'admin';
+    $action = $isAdmin ? 'users' : 'books';
+    $allowedActions = $isAdmin ? $actionsAdmin : $actionsReader;
 } else {
     $action = 'login';
     $allowedActions = $actionsGuest;
@@ -38,23 +46,24 @@ if ($isLoggedIn) {
 if (isset($_GET['action']) && in_array($_GET['action'], $allowedActions, true)) {
     $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_SPECIAL_CHARS);
 } elseif (isset($_GET['action'])) {
-    // Jeśli akcja nie jest dozwolona, przekieruj
+    // Jeśli akcja nie jest dozwolona, przekierowuje
     if ($isLoggedIn) {
-        header('Location: index.php?action=home');
+        $redirectAction = $isAdmin ? 'users' : 'books';
+        header('Location: index.php?action=' . $redirectAction);
     } else {
         header('Location: index.php?action=login');
     }
     exit();
 }
 
-// Przekierowanie zalogowanego użytkownika z login do home
+// Przekierowanie zalogowanego użytkownika z login do books
 if ($isLoggedIn && $action === 'login') {
-    header('Location: index.php?action=home');
+    header('Location: index.php?action=books');
     exit();
 }
 
 // Przekierowanie niezalogowanego użytkownika z chronionych stron
-if (!$isLoggedIn && in_array($action, ['home', 'date', 'logout'])) {
+if (!$isLoggedIn && !in_array($action, $actionsGuest)) {
     header('Location: index.php?action=login');
     exit();
 }
